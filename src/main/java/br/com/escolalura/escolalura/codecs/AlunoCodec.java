@@ -50,8 +50,22 @@ public class AlunoCodec implements CollectibleCodec<Aluno>{
 	}
 
 	@Override
-	public Aluno decode(BsonReader arg0, DecoderContext arg1) {
-		return null;
+	public Aluno decode(BsonReader reader, DecoderContext decoder) {
+		Document documento = this.codec.decode(reader, decoder);
+		
+		Aluno aluno = new Aluno();
+		aluno.setId(documento.getObjectId("_id"));
+		aluno.setNome(documento.getString("nome"));
+		aluno.setDataNascimento(documento.getDate("data_nascimento"));
+		
+		Document curso = (Document) documento.get("curso");
+		if(curso != null){
+			String nomeCurso = curso.getString("nome");
+			aluno.setCurso(new Curso(nomeCurso));
+		}
+		
+		
+		return aluno;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package br.com.escolalura.escolalura.controllers;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +29,13 @@ public class AlunoController {
 		repositorio.salvar(aluno);
 		System.out.println(aluno);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/aluno/listar")
+	public String listar(Model model){
+		List<Aluno> alunos = repositorio.obterTodosAlunos();
+		model.addAttribute("alunos",alunos);
+		return "aluno/listar";
 	}
 	
 	
