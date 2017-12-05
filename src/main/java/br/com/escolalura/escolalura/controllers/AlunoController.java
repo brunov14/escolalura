@@ -28,7 +28,7 @@ public class AlunoController {
 	public String salvar(@ModelAttribute Aluno aluno){
 		repositorio.salvar(aluno);
 		System.out.println(aluno);
-		return "redirect: /";
+		return "redirect:/";
 	}
 	
 	
