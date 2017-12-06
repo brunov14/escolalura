@@ -4,6 +4,10 @@ public class Curso {
 	
 	private String nome;
 
+	public Curso() {
+		super();
+	}
+
 	public Curso(String nomeCurso) {
 		this.nome = nomeCurso;
 	}
