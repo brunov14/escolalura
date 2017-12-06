@@ -18,6 +18,7 @@ import org.bson.types.ObjectId;
 import br.com.escolalura.escolalura.models.Aluno;
 import br.com.escolalura.escolalura.models.Curso;
 import br.com.escolalura.escolalura.models.Habilidade;
+import br.com.escolalura.escolalura.models.Nota;
 
 public class AlunoCodec implements CollectibleCodec<Aluno>{
 
@@ -35,7 +36,8 @@ public class AlunoCodec implements CollectibleCodec<Aluno>{
 		Date dataNascimento = aluno.getDataNascimento();
 		Curso curso = aluno.getCurso();
 		List<Habilidade> habilidades = aluno.getHabilidades();
-
+		List<Nota> notas = aluno.getNotas();
+		
 		Document document = new Document();
 		document.put("_id", id);
 		document.put("nome", nome);
@@ -51,6 +53,18 @@ public class AlunoCodec implements CollectibleCodec<Aluno>{
 			}	
 			document.put("habilidades", habilidadeDocuments);
 		}
+		
+		if(notas != null){
+			ArrayList<Double> notasAluno = new ArrayList<Double>();
+			
+			for(Nota nota : notas){
+				notasAluno.add(nota.getValor());
+			}
+			
+			document.put("notas", notasAluno);
+			
+		}
+		
 		
 		codec.encode(writer, document, encoder);
 		
@@ -78,6 +92,31 @@ public class AlunoCodec implements CollectibleCodec<Aluno>{
 			aluno.setCurso(new Curso(nomeCurso));
 		}
 		
+		ArrayList<Double> notas = (ArrayList<Double>) documento.get("notas");
+		
+		if(notas != null){
+			List<Nota> notasAluno = new ArrayList<Nota>();
+		
+			for(Double valor : notas){
+				notasAluno.add(new Nota(valor));
+			}
+			
+			aluno.setNotas(notasAluno);;
+		}
+		
+		
+		ArrayList<Document> habilidades = (ArrayList<Document>) documento.get("habilidades");
+		
+		if(habilidades != null){
+			ArrayList<Habilidade> habilidadesAluno = new ArrayList<Habilidade>();
+			
+			for(Document habilidade : habilidades){
+				habilidadesAluno.add(new Habilidade(habilidade.getString("nome"),habilidade.getString("nivel")));
+			}
+			
+			aluno.setHabilidades(habilidadesAluno);
+			
+		}
 		
 		return aluno;
 	}
